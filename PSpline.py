@@ -150,28 +150,3 @@ class PSpline:
         mu_grid = np.exp(zu)
         model['mu_grid'] = mu_grid
         return model
-
-
-from matplotlib.pylab import plt
-import statsmodels.api as sm
-import pandas as pd
-
-p_spline = PSpline()
-# Get the data
-mcycle = sm.datasets.get_rdataset('mcycle', 'MASS').data
-x = mcycle.times
-y = mcycle.accel
-
-# Basis parameters
-n_seg = 50
-b_deg = 3
-p_ord = 2
-
-# Explore 5 lambdas
-alphas = np.array([10 ** x for x in range(-2, 2)])
-F1 = pd.DataFrame({'x': x, 'y': y})
-for k in range(len(alphas)):
-    # Fit P-splines
-    fit = p_spline.ps_normal(x, y, n_seg=n_seg, b_deg=b_deg, p_ord=p_ord, alpha=alphas[k])
-    F2 = pd.DataFrame({'xg': fit['x_grid'], 'yg': fit['y_grid']})
-    a = 0
